@@ -4,13 +4,12 @@ const electron = require('electron')
 const url = require('url');
 const pug = require('pug');
 const fs = require('fs');
+const os = require('os');
 const mime = require('mime');
 
 const config = require('./config.json');
 
-const app = electron.app
-const protocol = electron.protocol;
-const BrowserWindow = electron.BrowserWindow
+const { app, protocol, BrowserWindow } = require('electron');
 
 const locals = {};
 
@@ -19,14 +18,14 @@ var mainWindow = null;
 function createWindow() {
     mainWindow = new BrowserWindow({ width: 1068, height: 610, resizable: true, autoHideMenuBar: true })
     mainWindow.setMenu(null);
-    
+
     if (config.mode == "debug") {
         mainWindow.webContents.openDevTools();
-      }
-    
+    }
+
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'index.pug'),
-        protocol: 'pug:',
+        protocol: 'pug',
         slashes: true
     }))
 
@@ -35,12 +34,11 @@ function createWindow() {
     })
 }
 
-app.on('ready', function () {
+app.on('ready', function() {
 
-    protocol.registerBufferProtocol('pug', function (request, callback) {
-
+    protocol.registerBufferProtocol('pug', function(request, callback) {
         let parsedUrl = require('url').parse(request.url);
-        var url = path.normalize(request.url.replace('pug:///', '')).replace(/\?.*/, "");
+        var url = path.normalize(request.url.replace(os.type() == 'Windows_NT' ? 'pug:///' : 'pug://', '')).replace(/\?.*/g, "");
         let ext = path.extname(url);
 
         switch (ext) {
@@ -49,7 +47,7 @@ app.on('ready', function () {
 
                 callback({
                     mimeType: 'text/html',
-                    data: Buffer.from(content)
+                    data: new Buffer.from(content)
                 });
                 break;
 
@@ -64,6 +62,7 @@ app.on('ready', function () {
     createWindow();
 
 });
+
 
 app.on('window-all-closed', () => {
 

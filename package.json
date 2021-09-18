@@ -1,54 +1,55 @@
 {
-  "name": "electron-kanban",
-  "version": "1.0.0",
-  "description": "Electron Kanban",
-  "main": "main.js",
-  "scripts": {
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder --publish never",
-    "start": "electron ."
-  },
-  "build": {
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+    "name": "electron-kanban",
+    "version": "1.0.0",
+    "description": "Electron Kanban",
+    "main": "main.js",
+    "scripts": {
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder --publish never",
+        "start": "electron ."
+    },
+    "build": {
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thesourorange/electron-kanban.git"
-  },
-  "keywords": [
-    "Electron",
-    "Kanban"
-  ],
-  "author": "thesourorange",
-  "license": "CC0-1.0",
-  "dependencies": {
-    "pug": "^2.0.4",
-    "mime": "^2.4.5",
-    "compression": "^1.1.0",
-    "sanitizer": "~0.1.1",
-    "jquery": "3.3.1",
-    "jquery-ui-dist": "^1.12.1",
-    "jquery-jeditable": "^2.0.2",
-    "font-awesome": "^4.7.0",
-    "d3": "^5.16.0",
-    "yargs": "~2.3.0"
-  },
-  "devDependencies": {
-    "electron": "^8.2.5",
-    "electron-builder": "^22.6.0"
-  },
-  "bugs": {
-    "url": "https://github.com/thesourorange/electron-kanban/issues"
-  },
-  "homepage": "https://github.com/thesourorange/electron-kanban#readme"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thesourorange/electron-kanban.git"
+    },
+    "keywords": [
+        "Electron",
+        "Kanban"
+    ],
+    "author": "thesourorange",
+    "license": "CC0-1.0",
+    "dependencies": {
+        "pug": "^3.0.2",
+        "mime": "^2.4.5",
+        "compression": "^1.1.0",
+        "sanitizer": "~0.1.1",
+        "jquery": "^3.6.0",
+        "jquery-ui-dist": "^1.12.1",
+        "jquery-jeditable": "^2.0.2",
+        "font-awesome": "^4.7.0",
+        "d3": "^5.16.0",
+        "yargs": "~2.3.0"
+    },
+    "devDependencies": {
+        "electron": "^14.0.1",
+        "electron-builder": "^22.11.7",
+        "node": "^16.9.1"
+    },
+    "bugs": {
+        "url": "https://github.com/thesourorange/electron-kanban/issues"
+    },
+    "homepage": "https://github.com/thesourorange/electron-kanban#readme"
 }

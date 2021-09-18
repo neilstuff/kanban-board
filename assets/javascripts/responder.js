@@ -5,8 +5,6 @@
  * Date: 1/5/2018
  */
 
-document.addEventListener('dragover', event => event.preventDefault());
-document.addEventListener('drop', event => event.preventDefault());
 
 var cards = new Array();
 var totalcolumns = 0;
@@ -19,7 +17,7 @@ var board = {};
 var baseurl = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
 
 function unblockUI() {
-    $.fn.unblockUI = ({fadeOut: 50});
+    $.fn.unblockUI = ({ fadeOut: 50 });
 }
 
 function blockUI(message) {
@@ -59,7 +57,7 @@ $(document).bind('keyup', (event) => {
  */
 $('#save').on('click', (e) => {
     var data = {
-        columns:columns,
+        columns: columns,
         cards: cards,
         board: board
     };
@@ -78,10 +76,10 @@ $('#save').on('click', (e) => {
  */
 $('#open').on('click', (e) => {
     var fileutil = new FileUtil(document);
- 
+
     fileutil.load((files) => {
-        Array.prototype.slice.call(files).forEach((file) => { 
-                    
+        Array.prototype.slice.call(files).forEach((file) => {
+
             $('.card').remove();
             $('.col').remove();
 
@@ -93,20 +91,20 @@ $('#open').on('click', (e) => {
 
             $.get(fileURL, (data) => {
                 var kanban = JSON.parse(data);
-                
+
                 resizeBoard(kanban.board.size);
                 initColumns(kanban.columns);
                 initCards(kanban.cards);
 
-             }, 'text');
-        
-    
+            }, 'text');
+
+
         });
-        
+
     });
 
     return false;
-  
+
 });
 
 /**
@@ -151,9 +149,9 @@ function drawNewCard(id, text, x, y, rot, colour, stickers, animationspeed) {
 	</div>';
 
     var card = $(html);
-    
+
     card.appendTo('#board');
-  
+
     card.draggable({
         snap: false,
         snapTolerance: 5,
@@ -163,12 +161,12 @@ function drawNewCard(id, text, x, y, rot, colour, stickers, animationspeed) {
             keyTrap = null;
         },
         drag: function(event, ui) {
-           if (keyTrap == 27) {
+            if (keyTrap == 27) {
                 ui.helper.css(ui.originalPosition);
                 return false;
             }
         },
-		handle: "div.content"
+        handle: "div.content"
     });
 
     card.bind("dragstop", function(event, ui) {
@@ -182,7 +180,7 @@ function drawNewCard(id, text, x, y, rot, colour, stickers, animationspeed) {
             position: ui.position,
             oldposition: ui.originalPosition,
         };
- 
+
         onChangeCardPosition(data);
 
     });
@@ -244,23 +242,23 @@ function drawNewCard(id, text, x, y, rot, colour, stickers, animationspeed) {
 
     card.children('.delete-card-icon').click(
         function() {
- 
+
             $("#" + id).remove();
 
             var cloneCards = new Array();
 
-            Array.prototype.slice.call(cards).forEach(function(card) { 
+            Array.prototype.slice.call(cards).forEach(function(card) {
 
                 if (card.id != id) {
-        
+
                     cloneCards.push(card);
-        
+
                 }
-        
+
             });
 
             cards = cloneCards;
-        
+
         }
 
     );
@@ -274,13 +272,13 @@ function drawNewCard(id, text, x, y, rot, colour, stickers, animationspeed) {
         cssclass: 'card-edit-form',
         onblur: 'submit'
     });
- 
+
     if (stickers !== null) {
-        Array.prototype.slice.call(stickers).forEach(function(sticker) { 
+        Array.prototype.slice.call(stickers).forEach(function(sticker) {
             addSticker(id, sticker);
         });
     }
- 
+
 }
 
 /**
@@ -314,7 +312,7 @@ function addSticker(cardId, stickerId) {
 
     if (stickerContainer.html().indexOf(stickerId) < 0) {
         stickerContainer.prepend('<img src="assets/images/stickers/' + stickerId +
-                '.png">');
+            '.png">');
     }
 
 }
@@ -330,24 +328,24 @@ function addSticker(cardId, stickerId) {
  * @param {*} colour the card colour
  */
 function createCard(id, text, x, y, rot, colour) {
-    
+
     try {
-    drawNewCard(id, text, x, y, rot, colour, null);
+        drawNewCard(id, text, x, y, rot, colour, null);
 
-    var card = {
-        id: id,
-        text: text,
-        x: x,
-        y: y,
-        rot: rot,
-        stickers: new Array(),
-        colour: colour
-    };
+        var card = {
+            id: id,
+            text: text,
+            x: x,
+            y: y,
+            rot: rot,
+            stickers: new Array(),
+            colour: colour
+        };
 
-    cards.push(card);
+        cards.push(card);
     } catch (e) {
         alert(e);
-    }    
+    }
 }
 
 /**
@@ -379,7 +377,7 @@ function initCards(cardArray) {
             card.rot,
             card.colour,
             card.stickers,
-            0    
+            0
         );
 
     });
@@ -454,7 +452,7 @@ function onColumnChange(id, text) {
  */
 function onCardChange(id, value) {
 
-    Array.prototype.slice.call(cards).forEach((card) => { 
+    Array.prototype.slice.call(cards).forEach((card) => {
 
         if (card.id == id) {
             card.text = value;
@@ -471,7 +469,7 @@ function onCardChange(id, value) {
  */
 function onChangeCardPosition(data) {
 
-    Array.prototype.slice.call(cards).forEach((card) => { 
+    Array.prototype.slice.call(cards).forEach((card) => {
 
         if (card.id == data.id) {
             card.x = data.position.left;
@@ -489,8 +487,8 @@ function onChangeCardPosition(data) {
  * @param {*} stickerId 
  */
 function onAddSticker(cardId, stickerId) {
-     
-    Array.prototype.slice.call(cards).forEach((card) => { 
+
+    Array.prototype.slice.call(cards).forEach((card) => {
 
         if (card.id == cardId) {
 
@@ -534,7 +532,7 @@ function createColumn(name) {
     if (totalcolumns >= 8) return false;
 
     drawNewColumn(name);
-    
+
     columns.push(name);
 
 }
@@ -548,7 +546,7 @@ function deleteColumn() {
     if (totalcolumns <= 0) return false;
 
     displayRemoveColumn();
-    
+
     columns.pop();
 
 }
@@ -570,7 +568,7 @@ function updateColumns(newColumns) {
  * @param {*} next the column to 'fade out'
  */
 function deleteColumns(next) {
- 
+
     $('.col').fadeOut('slow', next());
 
 }
@@ -587,10 +585,10 @@ function initColumns(columnArray) {
     $('.col').remove();
 
     Array.prototype.slice.call(columns).forEach((column) => {
-        
+
         drawNewColumn(column);
 
-   });
+    });
 
 }
 
@@ -614,9 +612,9 @@ function changeThemeTo(theme) {
  * @param {*} ui the UI
  */
 function boardResizeHappened(event, ui) {
- 
+
     board.size = ui.size;
- 
+
 }
 
 /**
@@ -643,7 +641,7 @@ function calcCardOffset() {
     var offsets = {};
     $(".card").each(function() {
         var card = $(this);
-        
+
         $(".col").each(function(iCol) {
             var col = $(this);
             if (col.offset().left + col.outerWidth() > card.offset().left +
@@ -685,8 +683,8 @@ function adjustCard(offsets, doSync) {
                     left: parseInt(card.css('left').slice(0, -2)),
                     top: parseInt(card.css('top').slice(0, -2))
                 }
-            }; 
-            
+            };
+
             if (!doSync) {
                 card.css('left', data.position.left);
                 card.css('top', data.position.top);
@@ -698,30 +696,33 @@ function adjustCard(offsets, doSync) {
     });
 }
 
-$(function() {
- 
+$(() => {
+
+    document.addEventListener('dragover', event => event.preventDefault());
+    document.addEventListener('drop', event => event.preventDefault());
+
     board.size = {};
     board.size.width = $("#board").width();
     board.size.height = $("#board").height();
- 
+
     if (boardInitialized === false) {
         blockUI('<img src="assets/images/ajax-loader.gif" width=43 height=11/>');
-    }   
- 
+    }
+
     $("#create-card")
         .click(function() {
-            var rotation = Math.random() * 10 - 5; 
-            uniqueID = Math.round(Math.random() * 99999999); 
+            var rotation = Math.random() * 10 - 5;
+            uniqueID = Math.round(Math.random() * 99999999);
             createCard(
                 'card' + uniqueID,
                 '',
-                58, $('div.board-outline').height(), 
+                58, $('div.board-outline').height(),
                 rotation,
                 randomCardColour());
         });
 
     $("#smallify").click(function() {
-         
+
         if (currentTheme == "bigcards") {
             changeThemeTo('smallcards');
         } else if (currentTheme == "smallcards") {
@@ -771,9 +772,9 @@ $(function() {
     (function() {
         var offsets;
 
-        $(".board-outline").bind("resizestart", function() {       
+        $(".board-outline").bind("resizestart", function() {
             offsets = calcCardOffset();
-       });
+        });
 
         $(".board-outline").bind("resize", function(event, ui) {
             adjustCard(offsets, false);
