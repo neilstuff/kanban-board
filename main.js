@@ -23,11 +23,7 @@ function createWindow() {
         mainWindow.webContents.openDevTools();
     }
 
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.pug'),
-        protocol: 'pug',
-        slashes: true
-    }))
+    mainWindow.loadURL(`pug:///${path.join(__dirname, 'index.pug')}`);
 
     mainWindow.on('closed', () => {
         mainWindow = null
@@ -37,13 +33,14 @@ function createWindow() {
 app.on('ready', function() {
 
     protocol.registerBufferProtocol('pug', function(request, callback) {
-        let parsedUrl = require('url').parse(request.url);
-        var url = path.normalize(request.url.replace(os.type() == 'Windows_NT' ? 'pug:///' : 'pug://', '')).replace(/\?.*/g, "");
-        let ext = path.extname(url);
+        let parsedUrl = new URL(request.url);
+        let pathname = path.normalize(path.toNamespacedPath(parsedUrl.pathname).startsWith("\\\\?\\") ?
+                            parsedUrl.pathname.replace(/^\/*/, '') :  parsedUrl.pathname);
+        let ext = path.extname(pathname);
 
         switch (ext) {
             case '.pug':
-                var content = pug.renderFile(url);
+                var content = pug.renderFile(pathname);
 
                 callback({
                     mimeType: 'text/html',
@@ -52,11 +49,11 @@ app.on('ready', function() {
                 break;
 
             default:
-                let output = fs.readFileSync(url);
+                let output = fs.readFileSync(pathname);
 
                 return callback({ data: output, mimeType: mime.getType(ext) });
         }
-
+        
     });
 
     createWindow();
